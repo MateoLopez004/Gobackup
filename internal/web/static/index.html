@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gobackup Web | Panel de Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-database"></i> Gobackup Web</h1>
+        <p class="subtitle">Sistema de respaldo de Archivos</p>
+    </header>
+
+    <!-- Zona de Drag & Drop -->
+    <div class="card">
+        <h2><i class="fas fa-folder-plus"></i> Seleccionar Archivos</h2>
+        <div id="dropZone" class="drop-zone">
+            <div class="drop-content">
+                <i class="fas fa-cloud-upload-alt drop-icon"></i>
+                <h3>Arrastra archivos aquí</h3>
+                <p>o haz clic para seleccionar archivos</p>
+                <input type="file" id="folderInput" multiple style="display: none;">
+                <button onclick="document.getElementById('folderInput').click()" class="btn-secondary">
+                    <i class="fas fa-folder-open"></i> Seleccionar Archivos
+                </button>
+            </div>
+        </div>
+
+        <div id="selectedFolder" class="selected-folder" style="display: none;">
+            <h3><i class="fas fa-check-circle"></i> Archivos listos:</h3>
+            <div class="folder-path">
+                <i class="fas fa-file"></i>
+                <span id="folderPath">0 archivos seleccionados</span>
+            </div>
+            <div class="folder-actions">
+                <button id="startBackup" class="btn-primary">
+                    <i class="fas fa-play"></i> Iniciar Backup
+                </button>
+                <button id="clearSelection" class="btn-secondary">
+                    <i class="fas fa-times"></i> Limpiar Selección
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de estado -->
+    <div class="card">
+        <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Arrastra archivos para comenzar</span>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="totalFiles">0</div>
+                <div class="stat-label">Archivos totales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="copiedFiles">0</div>
+                <div class="stat-label">Archivos copiados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="errorCount">0</div>
+                <div class="stat-label">Errores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="progressPercent">0%</div>
+                <div class="stat-label">Progreso</div>
+            </div>
+        </div>
+
+        <div id="progressContainer">
+            <div id="progressBar">0%</div>
+        </div>
+
+        <div id="controls">
+            <button id="resetApp" style="display:none;" class="btn-secondary">
+                <i class="fas fa-redo"></i> Reiniciar
+            </button>
+        </div>
+    </div>
+
+    <!-- Registro de actividad -->
+    <div class="card">
+        <h2><i class="fas fa-terminal"></i> Registro de actividad</h2>
+        <div id="logs"></div>
+    </div>
+
+    <footer>
+        <p>Gobackup Web v1.0 &copy; 2023 | Sistema de respaldo empresarial</p>
+    </footer>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "source_dir": "",
+  "backup_dir": "",
+  "uploads_dir": "uploads",
+  "backups_dir": "backups",
+  "temp_dir": "temp",
+  "modified_minutes": 0,
+  "max_concurrency": 5,
+  "server_port": 8080
+}

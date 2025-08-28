@@ -1,0 +1,268 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <limits>
+#include <locale>
+#include <filesystem>
+#include <windows.h> // Para activar UTF-8 en consola de Windows
+
+using namespace std;
+
+/*-------------------------------------------------------------
+ *  Normalización: baja a minúsculas y quita tildes/ñ -> n
+ -----------------------------------------------------------*/
+string normaliza(string s) {
+    for (auto& ch : s) {
+        switch (ch) {
+            case 'Á': case 'á': ch = 'a'; break;
+            case 'É': case 'é': ch = 'e'; break;
+            case 'Í': case 'í': ch = 'i'; break;
+            case 'Ó': case 'ó': ch = 'o'; break;
+            case 'Ú': case 'ú': case 'Ü': case 'ü': ch = 'u'; break;
+            case 'Ñ': case 'ñ': ch = 'n'; break;
+            default: ch = tolower(static_cast<unsigned char>(ch)); break;
+        }
+    }
+    return s;
+}
+
+string trim(string s) {
+    const string ws = " \t\r\n";
+    s.erase(0, s.find_first_not_of(ws));
+    s.erase(s.find_last_not_of(ws) + 1);
+    return s;
+}
+
+/*-------------------------------------------------------------
+ *  Tipos básicos
+ -----------------------------------------------------------*/
+struct Arista { string to; int w; };
+using Grafo         = unordered_map<string, vector<Arista>>;
+using AliasOriginal = unordered_map<string, string>;
+using Pistas        = unordered_map<string, string>;
+using Keywords      = unordered_map<string, string>;
+
+/*-------------------------------------------------------------
+ *  Agregar arista guardando solo el peso mínimo
+ -----------------------------------------------------------*/
+void addEdge(Grafo& g, const string& a, const string& b, int w) {
+    auto& vec = g[a];
+    auto it = find_if(vec.begin(), vec.end(),
+                      [&](const Arista& ar) { return ar.to == b; });
+    if (it == vec.end()) vec.push_back({ b, w });
+    else if (w < it->w)  it->w = w;
+}
+
+/*-------------------------------------------------------------
+ *  Carga del MAPA
+ -----------------------------------------------------------*/
+bool cargarMapa(const string& file, Grafo& g, AliasOriginal& alias, string& tesoro) {
+    ifstream in(file);
+    if (!in) { cerr << "[ERROR] No se pudo abrir " << file << '\n'; return false; }
+
+    string line;
+    while (getline(in, line)) {
+        line = trim(line);
+        if (line.empty() || line[0] == '#') continue;
+
+        istringstream iss(line);
+        string tok; iss >> tok;
+
+        if (tok == "treasure:" || tok == "tesoro:") {
+            iss >> tesoro; tesoro = normaliza(tesoro);
+        } else {
+            if (tok == "arista:") iss >> tok;
+            string a = tok, b; int w = 1;
+            if (!(iss >> b)) continue;
+            if (!(iss >> w)) w = 1;
+
+            string na = normaliza(a), nb = normaliza(b);
+            if (!alias.count(na)) alias[na] = a;
+            if (!alias.count(nb)) alias[nb] = b;
+            addEdge(g, na, nb, w);
+            addEdge(g, nb, na, w);
+        }
+    }
+    if (tesoro.empty())
+        for (auto& [n, _] : g)
+            if (n.find("tesoro") != string::npos) { tesoro = n; break; }
+
+    if (tesoro.empty()) {
+        cerr << "[ERROR] Nodo tesoro no encontrado.\n";
+        return false;
+    }
+    return true;
+}
+
+/*-------------------------------------------------------------
+ *  Carga de PISTAS
+ -----------------------------------------------------------*/
+bool cargarPistas(const string& file, Pistas& p) {
+    ifstream in(file);
+    if (!in) { cerr << "[ERROR] No se pudo abrir " << file << '\n'; return false; }
+    string line;
+    while (getline(in, line)) {
+        if (line.empty()) continue;
+        string nodo, texto;
+        auto pos = line.find(':');
+        if (pos != string::npos) {
+            nodo = line.substr(0, pos);
+            texto = line.substr(pos + 1);
+        } else {
+            istringstream iss(line);
+            iss >> nodo;
+            getline(iss, texto);
+        }
+        nodo = trim(nodo); texto = trim(texto);
+        if (!nodo.empty() && !texto.empty())
+            p[normaliza(nodo)] = texto;
+    }
+    return true;
+}
+
+/*-------------------------------------------------------------
+ *  Dijkstra que devuelve (ruta, costo)
+ -----------------------------------------------------------*/
+pair<vector<string>, int> dijkstra(const Grafo& g, const string& o, const string& d) {
+    const int INF = numeric_limits<int>::max();
+    unordered_map<string, int> dist;
+    unordered_map<string, string> prev;
+    for (auto& [n, _] : g) dist[n] = INF;
+
+    using PQ = pair<int, string>;
+    priority_queue<PQ, vector<PQ>, greater<PQ>> pq;
+    dist[o] = 0; pq.emplace(0, o);
+
+    while (!pq.empty()) {
+        auto [du, u] = pq.top(); pq.pop();
+        if (u == d) break;
+        if (du != dist[u]) continue;
+        for (auto& ar : g.at(u)) {
+            int nd = du + ar.w;
+            if (nd < dist[ar.to]) {
+                dist[ar.to] = nd;
+                prev[ar.to] = u;
+                pq.emplace(nd, ar.to);
+            }
+        }
+    }
+    if (dist[d] == INF) return { {}, INF };
+
+    vector<string> path;
+    for (string v = d; ; v = prev[v]) {
+        path.push_back(v);
+        if (v == o) break;
+    }
+    reverse(path.begin(), path.end());
+    return { path, dist[d] };
+}
+
+/*-------------------------------------------------------------
+ *  Construir secuencia siguiendo pistas
+ -----------------------------------------------------------*/
+vector<string> secuenciaPistas(const string& start, const Pistas& p, const Keywords& kw, const string& tesoro) {
+    vector<string> seq; string cur = start;
+    while (true) {
+        seq.push_back(cur);
+        if (cur == tesoro || !p.count(cur)) break;
+        string texto = p.at(cur), next;
+        for (auto& [n, _] : p)
+            if (texto.find(n) != string::npos) { next = n; break; }
+        if (next.empty()) {
+            string low = normaliza(texto);
+            for (auto& [k, n] : kw)
+                if (low.find(k) != string::npos) { next = n; break; }
+        }
+        if (next.empty() || next == cur) break;
+        cur = next;
+    }
+    if (seq.back() != tesoro) seq.push_back(tesoro);
+    return seq;
+}
+
+/*-------------------------------------------------------------
+ *  Guardar ruta
+ -----------------------------------------------------------*/
+void guardarRuta(const string& outFile, const vector<string>& ruta, const AliasOriginal& alias, int costo) {
+    ofstream out(outFile);
+    for (size_t i = 0; i < ruta.size(); ++i) {
+        out << alias.at(ruta[i]);
+        if (i + 1 < ruta.size()) out << " -> ";
+    }
+    out << "\nCosto total: " << costo << '\n';
+    cout << "[OK] Ruta escrita en " << outFile << '\n';
+}
+
+/*-------------------------------------------------------------
+ *  MAIN
+ -----------------------------------------------------------*/
+int main() {
+    SetConsoleOutputCP(65001); // Activar UTF-8 en consola Windows (Visual Studio)
+
+    Grafo g; AliasOriginal alias; string tesoro;
+    Pistas pistas; Keywords kw = { {"agua", "cueva"}, {"tesoro", "tesoro"} };
+
+    string mapaPath, pistasPath;
+    cout << "Archivo de MAPA: ";   getline(cin, mapaPath);
+    cout << "Archivo de PISTAS: "; getline(cin, pistasPath);
+
+    if (!cargarMapa(mapaPath, g, alias, tesoro) ||
+        !cargarPistas(pistasPath, pistas)) return 1;
+
+    string outFile = std::filesystem::path(mapaPath).replace_extension("_ruta.txt").string();
+
+    while (true) {
+        cout << "\n+------------------------------+\n";
+        cout << "|          MENÚ PRINCIPAL      |\n";
+        cout << "+------------------------------+\n";
+        cout << "| 1. Camino siguiendo pistas   |\n";
+        cout << "| 2. Camino mínimo directo     |\n";
+        cout << "| 3. Salir                     |\n";
+        cout << "+------------------------------+\n";
+        cout << "Seleccione una opción: ";
+
+        int op;
+        if (!(cin >> op)) break;
+        if (op == 3) break;
+
+        string inicioRaw;
+        cout << "Nodo de inicio: ";
+        cin >> inicioRaw;
+        string inicio = normaliza(inicioRaw);
+
+        if (!g.count(inicio)) {
+            cout << "[ERROR] Nodo inexistente.\n";
+            continue;
+        }
+
+        vector<string> sec = (op == 1) ? secuenciaPistas(inicio, pistas, kw, tesoro)
+                                      : vector<string>{ inicio, tesoro };
+
+        vector<string> ruta; int costo = 0; bool fail = false;
+        for (size_t i = 0; i + 1 < sec.size(); ++i) {
+            auto [tramo, w] = dijkstra(g, sec[i], sec[i + 1]);
+            if (tramo.empty()) { fail = true; break; }
+            if (!ruta.empty()) tramo.erase(tramo.begin());
+            ruta.insert(ruta.end(), tramo.begin(), tramo.end());
+            costo += w;
+        }
+        if (fail) {
+            cout << "[ERROR] No hay camino válido.\n";
+            continue;
+        }
+
+        cout << "\nCamino mínimo:\n";
+        for (size_t i = 0; i < ruta.size(); ++i) {
+            cout << alias[ruta[i]];
+            if (i + 1 < ruta.size()) cout << " -> ";
+        }
+        cout << "\nCosto total: " << costo << '\n';
+
+        guardarRuta(outFile, ruta, alias, costo);
+    }
+    return 0;
+}
