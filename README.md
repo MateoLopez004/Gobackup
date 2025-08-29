@@ -18,6 +18,7 @@ Gobackup es una herramienta escrita en Go para hacer respaldos de archivos modif
 ---
 
 ## 📂 Arquitectura del proyecto
+````
 Gobackup/
 ├─ cmd/
 │ ├─ root.go — Carga configuración y parámetros (Cobra)
@@ -35,7 +36,7 @@ Gobackup/
 │ └─ gobackup.log — Logs generados
 ├─ main.go — Punto de entrada
 └─ go.mod / go.sum — Dependencias
-
+````
 
 ---
 
