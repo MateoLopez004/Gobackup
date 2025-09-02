@@ -72,12 +72,6 @@ Edita la configuracion en "default.json"" en base a este criterio
 `````
 
 ▶️ Uso
-Modo CLI
-
-Ejecuta el respaldo directamente desde la terminal:
-````
-go run main.go cli -c config/default.json
-````
 Modo Web
 
 Inicia el servidor web:
@@ -91,4 +85,6 @@ http://localhost:8080
 
 
 (o el puerto que definas en config/default.json)
+Utiliza la funcion de drago and drop si es necesario, de igual manera hay una opcion para seleccionar carpeta.
+
 
