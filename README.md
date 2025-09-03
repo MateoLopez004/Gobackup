@@ -47,44 +47,109 @@ Gobackup/
 
 ---
 
-## 📥 Instalación
+🚀 Guía de Instalación Paso a Paso - Gobackup Web
+📋 Prerrequisitos
+Antes de comenzar, asegúrate de tener instalado:
 
-Clona el proyecto:
+Go 1.18 o superior - Descargar Go
 
-```bash
+Git - Descargar Git
+
+🔧 Paso 1: Clonar el Proyecto
+bash
+# Abre tu terminal o línea de comandos
+```
 git clone https://github.com/MateoLopez004/Gobackup.git
 cd Gobackup
-
 ```
-Despues utiliza el siguiente comando para instalar dependencia
-````
+📦 Paso 2: Instalar Dependencias
+Opción A: Instalación Automática (Recomendada)
+```
+# Este comando instala TODAS las dependencias necesarias
+go mod download && go mod tidy
+```
+Opción B: Instalación Manual (Si falla la automática)
+```
+# Instalar Gin Web Framework
+go get -u github.com/gin-gonic/gin
+
+# Instalar Cobra CLI
+go get -u github.com/spf13/cobra
+```
+Verificar instalación
+```
+go list -m github.com/gin-gonic/gin
+go list -m github.com/spf13/cobra
+```
+🏗️ Paso 3: Compilar el Programa
+Compilar para tu sistema operativo
+```
+go build -o gobackup .
+```
+Verificar que se creó el ejecutable
+```
+ls -la gobackup*  # Linux/Mac
+dir gobackup*     # Windows
+```
+
+🚀 Paso 4: Ejecutar el Servidor Web
+Ejecución Básica
+Ejecutar en primer plano (verás los logs)
+```
+./gobackup web
+```
+Ejecución con Opciones
+Usar puerto diferente (útil si el 8080 está ocupado)
+```
+./gobackup web --port 8081
+```
+# Usar archivo de configuración personalizado
+```
+./gobackup web --config config/custom.json
+```
+🌐 Paso 6: Acceder a la Aplicación
+Abre tu navegador web
+
+Ve a la dirección: http://localhost:8080
+
+Deberías ver la interfaz de Gobackup
+
+URLs importantes:
+Interfaz principal: http://localhost:8080
+
+Estadísticas: http://localhost:8080/stats.html
+
+Health check: http://localhost:8080/health
+
+🐛 Paso 7: Solución de Problemas Comunes
+Error: "Port already in use"
+# Usar otro puerto
+```
+./gobackup web --port 8081
+```
+Error: "Access denied" en Windows
+# Ejecutar como administrador
+# 1. Abre CMD/PowerShell como administrador
+# 2. Navega a la carpeta del proyecto
+# 3. Ejecuta:
+```
+go build -o gobackup.exe .
+./gobackup.exe web
+```
+Error: Dependencias faltantes
+# Limpiar y reinstalar todo
+```
+go clean -modcache
+go mod download
 go mod tidy
-````
-Edita la configuracion en "default.json"" en base a este criterio
-````
-{
-  "source_dir": "C:/ruta/origen",
-  "backup_dir": "C:/ruta/respaldo",
-  "modified_minutes": 60,
-  "max_concurrency": 5,
-  "server_port": 8080
-}
-`````
+go build -o gobackup .
+```
+📊 Paso 8: Verificar que Todo Funciona
+Abre http://localhost:8080
 
-▶️ Uso
-Modo Web
+Arrastra algún archivo a la zona de drop
 
-Inicia el servidor web:
-````
-go run main.go web -c config/default.json
-````
+Haz clic en "Iniciar Backup"
 
-Abre en tu navegador:
-
-http://localhost:8080
-
-
-(o el puerto que definas en config/default.json)
-Utiliza la funcion de drago and drop si es necesario, de igual manera hay una opcion para seleccionar carpeta.
-
+Deberías ver el progreso y luego poder descargar el ZIP
 
