@@ -17,7 +17,10 @@ func StartServer() {
 	router.GET("/", func(c *gin.Context) {
 		c.File("./internal/web/static/index.html")
 	})
-
+	// ✅ Sirve stats.html
+	router.GET("/stats.html", func(c *gin.Context) {
+		c.File("./internal/web/static/stats.html")
+	})
 	// ✅ Registrar endpoints API (están en routes.go)
 	SetupRoutes(router)
 

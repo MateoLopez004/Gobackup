@@ -83,8 +83,8 @@ h1 i {
     transition: var(--transition, all 0.3s ease);
     background-color: rgba(255, 255, 255, 0.02);
     cursor: pointer;
+    position: relative; /* Agregado para posicionamiento */
 }
-
 .drop-zone:hover {
     border-color: var(--primary-color, #2a5ee8);
     background-color: rgba(42, 94, 232, 0.1);
@@ -97,7 +97,7 @@ h1 i {
 }
 
 .drop-content {
-    pointer-events: none;
+
 }
 
 .drop-icon {
@@ -406,5 +406,118 @@ footer {
 
     .drop-zone {
         padding: 2rem 1rem;
+    }
+}
+/* Agrega esta nueva regla para el botón dentro de la dropzone */
+.drop-zone .btn-secondary {
+    pointer-events: auto; /* Asegura que el botón reciba eventos */
+    position: relative;
+    z-index: 2;
+}
+.drop-zone.dragover {
+    border-color: var(--primary-color, #2a5ee8);
+    background-color: rgba(42, 94, 232, 0.2);
+    transform: scale(1.02);
+}
+
+.drop-zone:hover {
+    border-color: var(--primary-color, #2a5ee8);
+    background-color: rgba(42, 94, 232, 0.1);
+}
+#fileInput {
+    display: none;
+}
+
+/* Mejora el estilo del botón de selección */
+#selectButton {
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+#selectButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* ================== ESTILOS PARA ESTADÍSTICAS ================== */
+
+.stats-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stats-section h2 {
+    color: var(--accent-color);
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin: 5px 0;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stats-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.footer-links {
+    margin-top: 10px;
+}
+
+.stats-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.stats-link:hover {
+    background-color: rgba(240, 165, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Responsive para estadísticas */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
     }
 }

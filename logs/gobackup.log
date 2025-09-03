@@ -334,3 +334,98 @@
 2025-08-26 22:33:25 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_40936\IDEAPROYECTONUTRICION.pptx
 2025-08-26 22:33:25 [INFO] Escaneo completado. Archivos encontrados: 1
 2025-08-26 22:33:25 [INFO] Archivo copiado y verificado: IDEAPROYECTONUTRICION.pptx
+2025-08-28 13:28:02 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 13:28:02 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 13:41:25 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 13:41:25 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 13:41:40 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 13:41:40 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:42:37 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:42:37 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:47:33 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:47:33 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:47:48 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:47:48 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:48:19 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:48:19 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:48:34 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:48:34 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:55:07 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 17:55:07 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 17:55:32 [INFO] Escaneando directorio: uploads\session_659012 (últimos 0 minutos)
+2025-08-28 17:55:32 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_659012\Analisis Vertical Balance General Completo Mateo Lopez.xlsx
+2025-08-28 17:55:32 [INFO] Escaneo completado. Archivos encontrados: 1
+2025-08-28 17:55:32 [INFO] Archivo copiado y verificado: Analisis Vertical Balance General Completo Mateo Lopez.xlsx
+2025-08-28 18:10:16 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 18:10:16 [DEBUG] Logger en modo DEBUG activo
+2025-08-28 18:12:39 [INFO] ✅ Logger inicializado correctamente
+2025-08-28 18:12:39 [DEBUG] Logger en modo DEBUG activo
+2025-08-29 13:32:39 [INFO] ✅ Logger inicializado correctamente
+2025-08-29 13:32:39 [DEBUG] Logger en modo DEBUG activo
+2025-08-29 13:33:19 [INFO] Escaneando directorio: uploads\session_962397 (últimos 0 minutos)
+2025-08-29 13:33:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_962397\Teoría General de los Sistemas..doc
+2025-08-29 13:33:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_962397\Teoría General de los Sistemas.png
+2025-08-29 13:33:19 [INFO] Escaneo completado. Archivos encontrados: 2
+2025-08-29 13:33:19 [INFO] Archivo copiado y verificado: Teoría General de los Sistemas.png
+2025-08-29 13:33:19 [INFO] Archivo copiado y verificado: Teoría General de los Sistemas..doc
+2025-08-29 13:34:18 [INFO] Escaneando directorio: uploads\session_836166 (últimos 0 minutos)
+2025-08-29 13:34:18 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_836166\Teoría General de los Sistemas..doc
+2025-08-29 13:34:18 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_836166\Teoría General de los Sistemas.png
+2025-08-29 13:34:18 [INFO] Escaneo completado. Archivos encontrados: 2
+2025-08-29 13:34:18 [INFO] Archivo copiado y verificado: Teoría General de los Sistemas.png
+2025-08-29 13:34:18 [INFO] Archivo copiado y verificado: Teoría General de los Sistemas..doc
+2025-08-29 13:35:19 [INFO] Escaneando directorio: uploads\session_854099 (últimos 0 minutos)
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Analisis Vertical Practico 1.xlsx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Caracteristicas del Software.docx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Copia de Amortizaciones_Final(1).xlsx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Copia de CORRECCION PRACTICO.xlsx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\DIAGRAMA DE PARETO ANALISIS ESTADISTICO Y DE CALIDAD.xlsx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Guia Presentacion Proyectos LAB-SO-2.docx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\IDEAPROYECTONUTRICION.pptx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\PRACTICO 2 MATEO LOPEZ.docx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Practico 2 Mateo Lopez.MPJ
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\Resumen de videos Sistemas de Informacion.docx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\SI320-TP1-G3.docx
+2025-08-29 13:35:19 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_854099\analisis.xlsx
+2025-08-29 13:35:19 [INFO] Escaneo completado. Archivos encontrados: 12
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: analisis.xlsx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Analisis Vertical Practico 1.xlsx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Copia de CORRECCION PRACTICO.xlsx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Copia de Amortizaciones_Final(1).xlsx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Practico 2 Mateo Lopez.MPJ
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: DIAGRAMA DE PARETO ANALISIS ESTADISTICO Y DE CALIDAD.xlsx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: IDEAPROYECTONUTRICION.pptx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: SI320-TP1-G3.docx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Guia Presentacion Proyectos LAB-SO-2.docx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: PRACTICO 2 MATEO LOPEZ.docx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Caracteristicas del Software.docx
+2025-08-29 13:35:19 [INFO] Archivo copiado y verificado: Resumen de videos Sistemas de Informacion.docx
+2025-09-02 11:39:01 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 11:39:01 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 11:39:01 [INFO] Starting CLI backup operation
+2025-09-02 21:14:04 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:14:04 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:15:10 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:15:10 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:16:52 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:16:52 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:17:37 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:17:37 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:21:02 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:21:02 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:21:21 [INFO] Escaneando directorio: uploads\session_155221 (últimos 0 minutos)
+2025-09-02 21:21:21 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_155221\Teoría General de los Sistemas..doc
+2025-09-02 21:21:21 [INFO] Escaneo completado. Archivos encontrados: 1
+2025-09-02 21:21:21 [INFO] Archivo copiado y verificado: Teoría General de los Sistemas..doc
+2025-09-02 21:22:18 [INFO] Escaneando directorio: uploads\session_605920 (últimos 0 minutos)
+2025-09-02 21:22:18 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_605920\Analisis Vertical Practico 1.xlsx
+2025-09-02 21:22:18 [INFO] Escaneo completado. Archivos encontrados: 1
+2025-09-02 21:22:18 [INFO] Archivo copiado y verificado: Analisis Vertical Practico 1.xlsx
+2025-09-02 21:36:24 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:36:24 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:37:11 [INFO] ✅ Logger inicializado correctamente
+2025-09-02 21:37:11 [DEBUG] Logger en modo DEBUG activo
+2025-09-02 21:37:27 [INFO] Escaneando directorio: uploads\session_285887 (últimos 0 minutos)
+2025-09-02 21:37:27 [DEBUG] Archivo detectado (sin filtro de tiempo): uploads\session_285887\DIAGRAMA DE PARETO ANALISIS ESTADISTICO Y DE CALIDAD MATEO LOPEZ.xlsx
+2025-09-02 21:37:27 [INFO] Escaneo completado. Archivos encontrados: 1
+2025-09-02 21:37:27 [INFO] Archivo copiado y verificado: DIAGRAMA DE PARETO ANALISIS ESTADISTICO Y DE CALIDAD MATEO LOPEZ.xlsx

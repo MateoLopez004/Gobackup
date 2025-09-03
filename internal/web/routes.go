@@ -2,6 +2,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"gobackup/internal/backup"
 	"math/rand"
@@ -47,6 +48,11 @@ func SetupRoutes(r *gin.Engine) {
 	// Health check y estadísticas
 	r.GET("/health", HealthCheck)
 	r.GET("/stats", handleStats)
+
+	// Nuevos endpoints para estadísticas
+	r.GET("/api/stats/history", handleStatsHistory)
+	r.GET("/api/stats/files", handleFileStats)
+	r.GET("/api/stats/summary", handleStatsSummary)
 }
 
 // -------------------- Upload --------------------
@@ -327,6 +333,120 @@ func handleStats(c *gin.Context) {
 		"timestamp": time.Now().Format(time.RFC3339),
 	})
 }
+
+// -------------------- Nuevos endpoints para estadísticas --------------------
+
+func handleStatsHistory(c *gin.Context) {
+	historyFile := filepath.Join(backup.BackupsDir, "backup_history.json")
+
+	data, err := os.ReadFile(historyFile)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"backups": []interface{}{}, "files": []interface{}{}})
+		return
+	}
+
+	var history struct {
+		Backups []interface{} `json:"backups"`
+		Files   []interface{} `json:"files"`
+	}
+
+	if err := json.Unmarshal(data, &history); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing history"})
+		return
+	}
+
+	c.JSON(http.StatusOK, history)
+}
+
+func handleFileStats(c *gin.Context) {
+	historyFile := filepath.Join(backup.BackupsDir, "backup_history.json")
+
+	data, err := os.ReadFile(historyFile)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"files": []interface{}{}})
+		return
+	}
+
+	var history struct {
+		Files []struct {
+			Path string `json:"path"`
+			Size int64  `json:"size"`
+		} `json:"files"`
+	}
+
+	if err := json.Unmarshal(data, &history); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing file stats"})
+		return
+	}
+
+	// Agrupar por tipo de archivo
+	typeStats := make(map[string]int64)
+	for _, file := range history.Files {
+		ext := filepath.Ext(file.Path)
+		if ext == "" {
+			ext = "sin extensión"
+		}
+		typeStats[ext] += file.Size
+	}
+
+	c.JSON(http.StatusOK, gin.H{"by_type": typeStats, "files": history.Files})
+}
+
+func handleStatsSummary(c *gin.Context) {
+	historyFile := filepath.Join(backup.BackupsDir, "backup_history.json")
+
+	data, err := os.ReadFile(historyFile)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"total_backups": 0,
+			"total_size":    0,
+			"avg_size":      0,
+			"avg_duration":  0,
+		})
+		return
+	}
+
+	var history struct {
+		Backups []struct {
+			TotalSize  int64   `json:"total_size"`
+			Duration   float64 `json:"duration_seconds"`
+			FilesCount int     `json:"files_count"`
+		} `json:"backups"`
+	}
+
+	if err := json.Unmarshal(data, &history); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing summary"})
+		return
+	}
+
+	var totalSize int64
+	var totalDuration float64
+	var totalFiles int
+
+	for _, backup := range history.Backups {
+		totalSize += backup.TotalSize
+		totalDuration += backup.Duration
+		totalFiles += backup.FilesCount
+	}
+
+	avgSize := float64(0)
+	avgDuration := float64(0)
+	if len(history.Backups) > 0 {
+		avgSize = float64(totalSize) / float64(len(history.Backups))
+		avgDuration = totalDuration / float64(len(history.Backups))
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"total_backups": len(history.Backups),
+		"total_size":    totalSize,
+		"total_size_mb": fmt.Sprintf("%.2f MB", float64(totalSize)/1024/1024),
+		"avg_size":      avgSize,
+		"avg_size_mb":   fmt.Sprintf("%.2f MB", avgSize/1024/1024),
+		"avg_duration":  fmt.Sprintf("%.2f segundos", avgDuration),
+		"total_files":   totalFiles,
+	})
+}
+
 func getDiskSpace() (int64, int64) {
 	return 0, 0
 }

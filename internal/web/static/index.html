@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gobackup Web | Panel de Control</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔃</text></svg>" type="image/svg+xml">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔃</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -17,13 +19,16 @@
     <!-- Zona de Drag & Drop -->
     <div class="card">
         <h2><i class="fas fa-folder-plus"></i> Seleccionar Archivos</h2>
+
+        <input type="file" id="fileInput" multiple style="display: none;">
+
         <div id="dropZone" class="drop-zone">
             <div class="drop-content">
                 <i class="fas fa-cloud-upload-alt drop-icon"></i>
                 <h3>Arrastra archivos aquí</h3>
                 <p>o haz clic para seleccionar archivos</p>
-                <input type="file" id="folderInput" multiple style="display: none;">
-                <button onclick="document.getElementById('folderInput').click()" class="btn-secondary">
+                <!-- BOTÓN MOVIDO FUERA PERO SE MANTIENE VISUALMENTE DENTRO -->
+                <button id="selectButton" class="btn-secondary">
                     <i class="fas fa-folder-open"></i> Seleccionar Archivos
                 </button>
             </div>
@@ -89,8 +94,41 @@
         <div id="logs"></div>
     </div>
 
+    <!-- Sección de Estadísticas Rápidas -->
+    <div class="card stats-section">
+        <h2><i class="fas fa-chart-bar"></i> Estadísticas Rápidas</h2>
+        <div class="stats-grid" id="quick-stats">
+            <div class="stat-item">
+                <div class="stat-number" id="quick-total-backups">0</div>
+                <div class="stat-label">Total Backups</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="quick-total-size">0 MB</div>
+                <div class="stat-label">Espacio Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="quick-avg-size">0 MB</div>
+                <div class="stat-label">Tamaño Promedio</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="quick-avg-duration">0s</div>
+                <div class="stat-label">Tiempo Promedio</div>
+            </div>
+        </div>
+        <div class="stats-actions">
+            <a href="./stats.html" class="btn-secondary">
+                <i class="fas fa-chart-line"></i> Ver Estadísticas Completas
+            </a>
+        </div>
+    </div>
+
     <footer>
-        <p>Gobackup Web v1.0 &copy; 2023 | Sistema de respaldo empresarial</p>
+        <p>Gobackup Web v1.0 &copy; 2025 | Sistema de respaldo empresarial</p>
+        <div class="footer-links">
+            <a href="./stats.html" class="stats-link">
+                <i class="fas fa-chart-bar"></i> Ver Estadísticas
+            </a>
+        </div>
     </footer>
 </div>
 

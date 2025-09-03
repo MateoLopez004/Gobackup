@@ -2,12 +2,14 @@ package backup
 
 import (
 	"archive/zip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Las variables globales serán inicializadas por el comando Cobra en cmd/root.go
@@ -21,6 +23,55 @@ var UploadsDir string
 var BackupsDir string
 var TempDir string
 var CurrentSessionID string
+
+// Estructuras para estadísticas
+type BackupStats struct {
+	Timestamp  time.Time `json:"timestamp"`
+	TotalSize  int64     `json:"total_size"`
+	FilesCount int       `json:"files_count"`
+	BackupType string    `json:"backup_type"`
+	Duration   float64   `json:"duration_seconds"`
+	Status     string    `json:"status"`
+	SessionID  string    `json:"session_id"`
+}
+
+type FileStats struct {
+	Path     string    `json:"path"`
+	Size     int64     `json:"size"`
+	Modified time.Time `json:"modified"`
+}
+
+// Función para guardar estadísticas
+func saveBackupStats(stats BackupStats, fileStats []FileStats) error {
+	historyFile := filepath.Join(BackupsDir, "backup_history.json")
+
+	var history struct {
+		Backups []BackupStats `json:"backups"`
+		Files   []FileStats   `json:"files"`
+	}
+
+	// Cargar historial existente si existe
+	if data, err := os.ReadFile(historyFile); err == nil {
+		json.Unmarshal(data, &history)
+	}
+
+	// Agregar nuevas estadísticas (limitar a últimos 50 backups)
+	history.Backups = append(history.Backups, stats)
+	if len(history.Backups) > 50 {
+		history.Backups = history.Backups[len(history.Backups)-50:]
+	}
+
+	// Actualizar información de archivos (mantener solo los más recientes)
+	history.Files = append(history.Files, fileStats...)
+
+	// Guardar en archivo
+	data, err := json.MarshalIndent(history, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(historyFile, data, 0644)
+}
 
 // RunBackup ejecuta el proceso completo de backup.
 func RunBackup() error {
@@ -81,6 +132,9 @@ func RunBackupWithSession(sessionID string) error {
 	CurrentSessionID = sessionID
 	sourceDir := filepath.Join(UploadsDir, sessionID)
 	backupDir := filepath.Join(BackupsDir, sessionID)
+	startTime := time.Now()
+	var totalSize int64
+	var fileStats []FileStats
 
 	// Validar directorios
 	if sourceDir == "" || backupDir == "" {
@@ -100,6 +154,21 @@ func RunBackupWithSession(sessionID string) error {
 		Status.SetError(errMsg)
 		log.Println(errMsg)
 		return err
+	}
+
+	// Calcular tamaño total y recopilar stats de archivos
+	for _, filePath := range files {
+		info, err := os.Stat(filePath)
+		if err == nil {
+			size := info.Size()
+			totalSize += size
+			relPath, _ := filepath.Rel(sourceDir, filePath)
+			fileStats = append(fileStats, FileStats{
+				Path:     relPath,
+				Size:     size,
+				Modified: info.ModTime(),
+			})
+		}
 	}
 
 	Status.Reset(len(files))
@@ -136,6 +205,24 @@ func RunBackupWithSession(sessionID string) error {
 
 	// Opcional: Limpiar directorio sin comprimir después de comprimir
 	os.RemoveAll(backupDir)
+
+	// Guardar estadísticas
+	duration := time.Since(startTime).Seconds()
+	stats := BackupStats{
+		Timestamp:  time.Now(),
+		TotalSize:  totalSize,
+		FilesCount: len(files),
+		BackupType: "session",
+		Duration:   duration,
+		Status:     "success",
+		SessionID:  sessionID,
+	}
+
+	if err != nil {
+		stats.Status = "failed"
+	}
+
+	saveBackupStats(stats, fileStats)
 
 	Status.SetDone()
 	log.Println("Backup finalizado correctamente.")
