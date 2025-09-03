@@ -42,6 +42,7 @@ type FileStats struct {
 }
 
 // Función para guardar estadísticas
+// Función para guardar estadísticas (VERSIÓN CORREGIDA)
 func saveBackupStats(stats BackupStats, fileStats []FileStats) error {
 	historyFile := filepath.Join(BackupsDir, "backup_history.json")
 
@@ -55,14 +56,19 @@ func saveBackupStats(stats BackupStats, fileStats []FileStats) error {
 		json.Unmarshal(data, &history)
 	}
 
-	// Agregar nuevas estadísticas (limitar a últimos 50 backups)
+	// Agregar nuevas estadísticas
 	history.Backups = append(history.Backups, stats)
-	if len(history.Backups) > 50 {
-		history.Backups = history.Backups[len(history.Backups)-50:]
+
+	// Limitar a últimos 100 backups para no hacer el archivo muy grande
+	if len(history.Backups) > 100 {
+		history.Backups = history.Backups[len(history.Backups)-100:]
 	}
 
 	// Actualizar información de archivos (mantener solo los más recientes)
 	history.Files = append(history.Files, fileStats...)
+	if len(history.Files) > 1000 {
+		history.Files = history.Files[len(history.Files)-1000:]
+	}
 
 	// Guardar en archivo
 	data, err := json.MarshalIndent(history, "", "  ")
@@ -71,6 +77,36 @@ func saveBackupStats(stats BackupStats, fileStats []FileStats) error {
 	}
 
 	return os.WriteFile(historyFile, data, 0644)
+}
+func analyzeFileTypes(files []string) map[string]int64 {
+	typeStats := make(map[string]int64)
+
+	for _, file := range files {
+		ext := strings.ToLower(filepath.Ext(file))
+		if ext == "" {
+			ext = "sin_extensión"
+		} else {
+			ext = ext[1:] // Quitar el punto
+		}
+
+		info, err := os.Stat(file)
+		if err == nil {
+			switch ext {
+			case "txt", "doc", "docx", "pdf", "rtf":
+				typeStats["Documentos"] += info.Size()
+			case "jpg", "jpeg", "png", "gif", "bmp", "webp":
+				typeStats["Imágenes"] += info.Size()
+			case "mp4", "avi", "mov", "wmv", "mkv":
+				typeStats["Videos"] += info.Size()
+			case "mp3", "wav", "flac", "aac":
+				typeStats["Audio"] += info.Size()
+			default:
+				typeStats["Otros"] += info.Size()
+			}
+		}
+	}
+
+	return typeStats
 }
 
 // RunBackup ejecuta el proceso completo de backup.

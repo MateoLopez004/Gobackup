@@ -3,182 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas de Backup - Gobackup</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Estadísticas de Backup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-        .stats-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .stats-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-
-        .chart-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chart-title {
-            margin-top: 0;
-            color: var(--accent-color);
-            text-align: center;
-        }
-
-        .backup-history {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        th {
-            background-color: rgba(0, 0, 0, 0.3);
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-color);
-            text-decoration: none;
-            margin-bottom: 20px;
-            padding: 8px 16px;
-            border: 1px solid var(--accent-color);
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        .nav-back:hover {
-            background-color: rgba(240, 165, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        canvas {
-            max-height: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/stats.css">
 </head>
 <body>
-<div class="stats-container">
-    <a href="/" class="nav-back">
-        <i class="fas fa-arrow-left"></i> Volver al Panel Principal
-    </a>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-chart-line"></i> Estadísticas de Backup</h1>
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i> Volver al Panel Principal
+        </a>
+    </header>
 
-    <div class="stats-header">
-        <h1><i class="fas fa-chart-bar"></i> Estadísticas de Backup</h1>
-        <p>Monitoreo y análisis de tus copias de seguridad</p>
-    </div>
-
-    <div class="stats-grid" id="summary-stats">
+    <div class="dashboard">
         <div class="stat-card">
-            <div class="stat-label">Total de Backups</div>
-            <div class="stat-value" id="total-backups">0</div>
+            <i class="fas fa-database"></i>
+            <h3>Total de Backups</h3>
+            <div class="value" id="total-backups">Cargando...</div>
+            <div class="subtext" id="backups-trend">Cargando...</div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">Espacio Total</div>
-            <div class="stat-value" id="total-space">0 MB</div>
+            <i class="fas fa-hdd"></i>
+            <h3>Espacio Total</h3>
+            <div class="value" id="total-space">Cargando...</div>
+            <div class="subtext" id="space-trend">Cargando...</div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">Tamaño Promedio</div>
-            <div class="stat-value" id="avg-size">0 MB</div>
+            <i class="fas fa-weight-hanging"></i>
+            <h3>Tamaño Promedio</h3>
+            <div class="value" id="avg-size">Cargando...</div>
+            <div class="subtext" id="max-size">Cargando...</div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">Tiempo Promedio</div>
-            <div class="stat-value" id="avg-duration">0s</div>
+            <i class="fas fa-stopwatch"></i>
+            <h3>Tiempo Promedio</h3>
+            <div class="value" id="avg-duration">Cargando...</div>
+            <div class="subtext" id="min-duration">Cargando...</div>
         </div>
     </div>
 
-    <div class="chart-container">
-        <h3 class="chart-title">Historial de Tamaños de Backup</h3>
-        <canvas id="sizeHistoryChart"></canvas>
+    <div class="info-grid">
+        <div class="card">
+            <h2><i class="fas fa-info-circle"></i> Información del Sistema</h2>
+            <div class="info-container" id="system-info">
+                <div class="info-row">
+                    <span class="info-label">Directorio de Backup:</span>
+                    <span id="backup-dir">Cargando...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Espacio Total:</span>
+                    <span id="disk-total">Cargando...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Espacio Usado:</span>
+                    <span id="disk-used">Cargando...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Espacio Libre:</span>
+                    <span id="disk-free">Cargando...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Hora del Servidor:</span>
+                    <span id="server-time">Cargando...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-file-alt"></i> Tipos de Archivo</h2>
+            <div class="file-types-container" id="file-types-list">
+                <!-- Los elementos se cargarán dinámicamente -->
+            </div>
+        </div>
     </div>
 
-    <div class="chart-container">
-        <h3 class="chart-title">Distribución por Tipo de Archivo</h3>
-        <canvas id="fileTypeChart"></canvas>
-    </div>
-
-    <div class="backup-history">
-        <h3>Historial de Backups</h3>
-        <table id="history-table">
-            <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Sesión</th>
-                <th>Tamaño</th>
-                <th>Archivos</th>
-                <th>Duración</th>
-                <th>Estado</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Los datos se llenarán con JavaScript -->
-            </tbody>
-        </table>
+    <!-- Tabla de historial de backups -->
+    <div class="card full-width">
+        <h2><i class="fas fa-history"></i> Historial Detallado</h2>
+        <div class="table-container">
+            <table id="history-table">
+                <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Sesión ID</th>
+                    <th>Tamaño</th>
+                    <th>Archivos</th>
+                    <th>Duración</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="6" style="text-align: center;">Cargando historial...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<footer>
+    <p>Gobackup &copy; 2025 - Sistema de Monitorización de Backups</p>
+</footer>
 
 <script src="/static/stats.js"></script>
 </body>

@@ -130,6 +130,9 @@ clearSelectionBtn.addEventListener('click', () => {
     appendLog("[INFO] Sesión reiniciada", "info");
     updateFileCounter();
     debugLog("Selección limpiada");
+
+    // Limpiar el localStorage también
+    localStorage.removeItem('gobackup_stats');
 });
 
 // ================== FUNCIÓN PARA ACTUALIZAR CONTADOR ==================
@@ -146,6 +149,7 @@ function updateFileCounter() {
         startBtn.disabled = true;
         debugLog("Contador actualizado: 0 archivos");
     }
+    saveStatsToStorage(); // Guardar después de cada actualización
 }
 
 // ================== FUNCIÓN PARA SUBIR ARCHIVOS ==================
@@ -265,6 +269,9 @@ resetBtn.addEventListener("click", () => {
     updateFileCounter();
     appendLog("[INFO] Aplicación reiniciada. Lista para el próximo backup.", "info");
     debugLog("Aplicación reiniciada");
+
+    // Limpiar el localStorage también
+    localStorage.removeItem('gobackup_stats');
 });
 
 // ================== FUNCIÓN PARA AGREGAR LOGS ==================
@@ -405,11 +412,46 @@ function loadQuickStats() {
         });
 }
 
+// ================== PERSISTENCIA DE ESTADÍSTICAS ==================
+
+// Usar localStorage para mantener las estadísticas entre recargas
+function saveStatsToStorage() {
+    const statsData = {
+        uploadedFilesCount: uploadedFilesCount,
+        uploadedFiles: uploadedFiles,
+        currentSessionId: currentSessionId,
+        lastUpdate: new Date().toISOString()
+    };
+    localStorage.setItem('gobackup_stats', JSON.stringify(statsData));
+}
+
+function loadStatsFromStorage() {
+    const savedStats = localStorage.getItem('gobackup_stats');
+    if (savedStats) {
+        const statsData = JSON.parse(savedStats);
+        uploadedFilesCount = statsData.uploadedFilesCount || 0;
+        uploadedFiles = statsData.uploadedFiles || [];
+        currentSessionId = statsData.currentSessionId || null;
+
+        // Actualizar la UI con los datos guardados
+        updateFileCounter();
+
+        // Mostrar mensaje de última actualización si es reciente
+        const lastUpdate = new Date(statsData.lastUpdate);
+        const now = new Date();
+        const diffMinutes = (now - lastUpdate) / (1000 * 60);
+
+        if (diffMinutes < 5) { // Menos de 5 minutos
+            appendLog(`[INFO] Sesión recuperada (${Math.round(diffMinutes)} min atrás)`, "info");
+        }
+    }
+}
+
 // ================== INICIALIZACIÓN ==================
 document.addEventListener('DOMContentLoaded', function() {
     debugLog("DOM completamente cargado");
     initializeSelectButton();
-    updateFileCounter();
+    loadStatsFromStorage(); // Cargar estadísticas guardadas
     appendLog("[INFO] Aplicación cargada. Arrastra archivos o haz clic para seleccionarlos.", "info");
     appendLog("[INFO] Los archivos se subirán al servidor y se comprimirán en un ZIP.", "info");
     debugLog("Inicialización completada");

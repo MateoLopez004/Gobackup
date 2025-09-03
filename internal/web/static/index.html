@@ -7,13 +7,16 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔃</text></svg>" type="image/svg+xml">
     <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔃</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ✅ Ahora con prefijo /static -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1><i class="fas fa-database"></i> Gobackup Web</h1>
-        <p class="subtitle">Sistema de respaldo de Archivos</p>
+        <div class="header-content">
+            <h1><i class="fas fa-database"></i> Gobackup Web</h1>
+            <p class="subtitle">Sistema de respaldo de Archivos</p>
+        </div>
     </header>
 
     <!-- Zona de Drag & Drop -->
@@ -27,7 +30,6 @@
                 <i class="fas fa-cloud-upload-alt drop-icon"></i>
                 <h3>Arrastra archivos aquí</h3>
                 <p>o haz clic para seleccionar archivos</p>
-                <!-- BOTÓN MOVIDO FUERA PERO SE MANTIENE VISUALMENTE DENTRO -->
                 <button id="selectButton" class="btn-secondary">
                     <i class="fas fa-folder-open"></i> Seleccionar Archivos
                 </button>
@@ -116,7 +118,7 @@
             </div>
         </div>
         <div class="stats-actions">
-            <a href="./stats.html" class="btn-secondary">
+            <a href="stats.html" class="btn-secondary">
                 <i class="fas fa-chart-line"></i> Ver Estadísticas Completas
             </a>
         </div>
@@ -125,7 +127,7 @@
     <footer>
         <p>Gobackup Web v1.0 &copy; 2025 | Sistema de respaldo empresarial</p>
         <div class="footer-links">
-            <a href="./stats.html" class="stats-link">
+            <a href="stats.html" class="stats-link">
                 <i class="fas fa-chart-bar"></i> Ver Estadísticas
             </a>
         </div>
