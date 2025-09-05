@@ -35,6 +35,7 @@ var rootCmd = &cobra.Command{
 		// Inicializar nuevo sistema
 		backup.UploadsDir = Cfg.UploadsDir
 		backup.BackupsDir = Cfg.BackupsDir
+		fmt.Println("[DEBUG] BackupsDir:", backup.BackupsDir)
 		backup.TempDir = Cfg.TempDir
 		backup.ModifiedMinutes = Cfg.ModifiedMinutes
 		backup.MaxConcurrency = Cfg.MaxConcurrency

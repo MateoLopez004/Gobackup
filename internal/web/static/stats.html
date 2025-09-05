@@ -46,64 +46,40 @@
         </div>
     </div>
 
-    <div class="info-grid">
-        <div class="card">
-            <h2><i class="fas fa-info-circle"></i> Información del Sistema</h2>
-            <div class="info-container" id="system-info">
-                <div class="info-row">
-                    <span class="info-label">Directorio de Backup:</span>
-                    <span id="backup-dir">Cargando...</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Espacio Total:</span>
-                    <span id="disk-total">Cargando...</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Espacio Usado:</span>
-                    <span id="disk-used">Cargando...</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Espacio Libre:</span>
-                    <span id="disk-free">Cargando...</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Hora del Servidor:</span>
-                    <span id="server-time">Cargando...</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2><i class="fas fa-file-alt"></i> Tipos de Archivo</h2>
-            <div class="file-types-container" id="file-types-list">
-                <!-- Los elementos se cargarán dinámicamente -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Tabla de historial de backups -->
-    <div class="card full-width">
-        <h2><i class="fas fa-history"></i> Historial Detallado</h2>
-        <div class="table-container">
-            <table id="history-table">
-                <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Sesión ID</th>
-                    <th>Tamaño</th>
-                    <th>Archivos</th>
-                    <th>Duración</th>
-                    <th>Estado</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="6" style="text-align: center;">Cargando historial...</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <style>
+    .dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .stat-card {
+        flex: 1 1 250px;
+        min-width: 250px;
+        max-width: 350px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        margin: 0 0.5rem;
+    }
+    .dashboard {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    @media (max-width: 900px) {
+        .dashboard {
+            flex-direction: column;
+            align-items: center;
+        }
+        .stat-card {
+            max-width: 90vw;
+        }
+    }
+    </style>
 </div>
 
 <footer>

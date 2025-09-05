@@ -142,20 +142,24 @@ func getStatsHistory(c *gin.Context) {
 
 // getFileTypeStats - Handler para tipos de archivo
 func getFileTypeStats(c *gin.Context) {
+	fmt.Println("[DEBUG] getFileTypeStats: Iniciando handler")
 	history, err := loadBackupHistory()
 	if err != nil {
+		fmt.Println("[ERROR] loadBackupHistory:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Calcular distribución de tipos de archivo
+	fmt.Printf("[DEBUG] Backups cargados: %d\n", len(history.Backups))
 	fileTypes := calculateFileTypeDistribution(history)
+	fmt.Printf("[DEBUG] Tipos de archivo calculados: %d\n", len(fileTypes))
 
 	var totalSize int64
 	for _, ft := range fileTypes {
 		totalSize += ft.Size
 	}
 
+	fmt.Printf("[DEBUG] Tamaño total de archivos: %d\n", totalSize)
 	c.JSON(http.StatusOK, gin.H{
 		"file_types": fileTypes,
 		"total_size": totalSize,
@@ -431,7 +435,6 @@ func RegisterBackupRoutes(router *gin.Engine) {
 		})
 	}
 }
-
 func RegisterAllRoutes(router *gin.Engine) {
 	// Rutas de API básicas
 	router.GET("/api/status", getBackupStatus)
@@ -450,9 +453,9 @@ func RegisterAllRoutes(router *gin.Engine) {
 
 	// Ruta de prueba para debug
 	router.GET("/api/debug", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(200, gin.H{
 			"message": "API funcionando",
-			"time":    time.Now().Format(time.RFC3339),
+			"time":    "now",
 			"routes":  []string{"/api/stats/summary", "/api/stats/history", "/api/stats/filetypes", "/api/system"},
 		})
 	})
